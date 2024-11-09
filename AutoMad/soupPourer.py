@@ -6,9 +6,10 @@ Created on Sat Nov  2 16:58:08 2024
 """
 
 import requests
-from bs4 import BeautifulSoup
-import autoMad
 import wordGrabber
+from bs4 import BeautifulSoup
+
+import autoMad
 
 
 def getPage(url):

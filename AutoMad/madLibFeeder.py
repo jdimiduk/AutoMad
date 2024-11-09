@@ -5,11 +5,13 @@ Created on Fri Jan 26 17:23:26 2024
 @author: dragon
 """
 
-import wordPicker
+import re
+
 import madLibify
 import sillyWordMaker
-import re
 import wordGrabber
+import wordPicker
+
 #import nltk
 
 def getName(character, name):

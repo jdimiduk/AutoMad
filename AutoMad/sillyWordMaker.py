@@ -5,9 +5,8 @@ Created on Thu Jan 25 16:45:38 2024
 @author: dragon
 """
 
-import string
 import random
-
+import string
 
 vowels = ["a","e","i","o","u","y"]
 consonants = ["b","c","d","f","g","h","j","k","l","m","n","p","q","r","s","t","v","w","x","y","z"]

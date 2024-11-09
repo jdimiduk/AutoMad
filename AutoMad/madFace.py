@@ -5,13 +5,13 @@ Created on Thu Oct 17 14:08:59 2024
 @author: dragon
 """
 
-from flask import Flask, render_template, request, Markup
-from madLibFeeder import appleSlices, noPeeling
-import wordGrabber
-import storySaver
+from flask import Flask, Markup, render_template, request
+
+from madLibFeeder import noPeeling
 import autoMad
 import soupPourer
-
+import storySaver
+import wordGrabber
 
 app = Flask(__name__)
 
@@ -21,21 +21,22 @@ def loadHome():
 
 @app.route("/story", methods = ['POST'])
 def story():
-    if request.form.get('stories') is not None:
-        pickedStory = request.form.get('stories')
+    pickedStory = request.form.get('stories')
+    if pickedStory is not None:
         rawStory = wordGrabber.getStory(wordGrabber.getStoryByName(pickedStory))
         if "|" in rawStory:
             story = noPeeling(rawStory)
         else:
-            story = autoMad.autoMad(rawStory,33,wordGrabber.getDictionary())
+            story = autoMad.autoMad(rawStory,33,wordGrabber.getDictionary()).replace("\n","<br>")
         story = Markup(story)
         return render_template('story.html',story=story)
-    if request.form.get('storyPaste') is not None:
-        storyIn=request.form.get('storyPaste')
+    autoStory = request.form.get('storyPaste')
+    if autoStory is not None:
         sillyFactor = request.form.get('sillyness')
-        story = autoMad.autoMad(storyIn,int(sillyFactor),wordGrabber.getDictionary())
+        story = autoMad.autoMad(autoStory,int(sillyFactor),wordGrabber.getDictionary(), ['pokemon'])
         story = Markup(story)
         return render_template('story.html',story=story)
+    return render_template('story.html',story='no story foun')
 
 @app.route("/renderPage", methods = ['POST'])
 def renderPage():

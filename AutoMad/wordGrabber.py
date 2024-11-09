@@ -12,9 +12,11 @@ from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
+
+import madDictionary
 import numpy as np
 import pandas as pd
-import madDictionary
+
 
 # If modifying these scopes, delete the file token.json.
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly","https://www.googleapis.com/auth/documents"]
@@ -107,7 +109,7 @@ def getDictionary():
     df.columns = df.iloc[0]
     df = df[1:]
     df = df.replace('', np.nan)
-    dictionary = madDictionary.madDictionary(df)
+    dictionary = madDictionary.MadDictionary(df)
     return dictionary
     
 #code from google documentation to extract the text from a document

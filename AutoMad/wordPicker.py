@@ -6,7 +6,9 @@ Created on Fri Jan 26 17:36:29 2024
 """
 
 import random
+
 import sillyWordMaker
+
 
 def verb():
     return(random.choice(verbs)+" ")

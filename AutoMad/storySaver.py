@@ -6,15 +6,15 @@ Created on Mon Oct 21 15:44:54 2024
 """
 
 import os.path
+import random
 
+import numpy as np
+import pandas as pd
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
-import numpy as np
-import pandas as pd
-import random
 
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly","https://www.googleapis.com/auth/documents"]
 SAVEDOC = "1Oha700Q9R_gGvVT2G2NYdL8Ixpr0xGwNVDJ3jMWOOhI"
