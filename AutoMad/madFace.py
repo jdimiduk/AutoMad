@@ -24,7 +24,7 @@ def story():
     pickedStory = request.form.get('stories')
     if pickedStory is not None:
         rawStory = wordGrabber.getStory(wordGrabber.getStoryByName(pickedStory))
-        if "|" in rawStory:
+        if "|" in rawStory: #is used in prepared stories with manual word choice, they should not go through the automatic process
             story = noPeeling(rawStory)
         else:
             story = autoMad.autoMad(rawStory,33,wordGrabber.getDictionary()).replace("\n","<br>")

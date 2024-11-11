@@ -6,11 +6,11 @@ Created on Sat Nov  2 16:58:08 2024
 """
 
 import requests
-import wordGrabber
+
 from bs4 import BeautifulSoup
 
 import autoMad
-
+import wordGrabber
 
 def getPage(url):
     response = requests.get(url)
@@ -21,7 +21,6 @@ def getPage(url):
 def madPage(url, sillyFactor):
     soup=getPage(url)
     dictionary = wordGrabber.getDictionary()
-    #text = soup.body.find_all(string=True)
     for line in soup.body.find_all(string=True):
         line.replace_with(autoMad.autoMad(line,sillyFactor,dictionary))
     stringSoup = str(soup)

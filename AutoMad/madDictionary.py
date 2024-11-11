@@ -26,7 +26,6 @@ class MadDictionary:
         return wordType
         
     def inCategory(self, word, category):
-        print('the category is ' + category)
         return self.dictionary[category].str.fullmatch(word.title()).any()
        
     def getWordInflect(self, wordType, possum):

@@ -13,10 +13,10 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
-import madDictionary
 import numpy as np
 import pandas as pd
 
+import madDictionary
 
 # If modifying these scopes, delete the file token.json.
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly","https://www.googleapis.com/auth/documents"]
@@ -72,21 +72,17 @@ def getStory(docID):
         service = build("docs", "v1", credentials=creds)
         # Retrieve the documents contents from the Docs service.
         document = service.documents().get(documentId=docID, includeTabsContent=True).execute()
-        plainText=''
-        allTabs = get_all_tabs(document)
-        for tab in allTabs:
-           # Get the DocumentTab from the generic Tab.
-            document_tab = tab.get('documentTab')
-            doc_content = document_tab.get('body').get('content')
-            plainText += read_structural_elements(doc_content)
-        return plainText
-    
-        
+        return "".join(getTextTab(tab) for tab in document.get('tabs'))
     except HttpError as err:
         print(err)
 
-#gets the word library from google sheets
-def getGoogleSheet(sheetID, sheetRange): 
+def getTextTab(tab): 
+    document = tab.get('documentTab')
+    content = document.get('body').get('content')
+    return read_structural_elements(content)
+    return "".join(readStructuralElements(element) for element in content)
+
+def getGoogleSheet(sheetID = MADLIB_SHEET_ID, sheetRange = WORDS): 
     creds = getCreds()
     try:
         service = build("sheets", "v4", credentials=creds)
@@ -111,14 +107,6 @@ def getDictionary():
     df = df.replace('', np.nan)
     dictionary = madDictionary.MadDictionary(df)
     return dictionary
-    
-#code from google documentation to extract the text from a document
-def get_all_tabs(doc):
-  all_tabs = []
-  for tab in doc.get('tabs'):
-    all_tabs.append(tab)
-  return all_tabs
-
 
 def read_paragraph_element(element):
   text_run = element.get('textRun')

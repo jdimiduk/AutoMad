@@ -7,10 +7,8 @@ Created on Fri Jan 26 17:23:26 2024
 
 import re
 
-import madLibify
 import sillyWordMaker
 import wordGrabber
-import wordPicker
 
 #import nltk
 
@@ -29,7 +27,7 @@ def noPeeling(madlib):
     libout = "" 
     characters = []
     
-    result=wordGrabber.getGoogleSheet()
+    madDictionary = wordGrabber.getDictionary()
     
     for word in madwords:
         if bool(re.search('&',word)):
@@ -42,13 +40,13 @@ def noPeeling(madlib):
             if len(chickenNugget)>0:
                 libout+=chickenNugget
             elif len(character)>1:
-                chickenNugget = wordGrabber.getWordFromResult(result,character[1])
+                chickenNugget = madDictionary.getWord(character[1])
                 characters.append([character[0],chickenNugget])
                 libout+=chickenNugget
         elif word == 'sillyword':
             libout += sillyWordMaker.sillyWord()
         elif (not bool(re.search(' ',word))):
-            libout+=wordGrabber.getWordFromResult(result,word)
+            libout+=madDictionary.getWord(word)
         else:
             libout += word   
     libout=libout.replace("\n","<br>")
