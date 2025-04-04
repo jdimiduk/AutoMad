@@ -6,6 +6,9 @@ Created on Thu Oct 17 14:08:59 2024
 """
 
 from flask import Flask, Markup, render_template, request
+from pathlib import Path
+import pandas as pd
+import json
 
 from madLibFeeder import noPeeling
 import autoMad
@@ -13,37 +16,37 @@ import soupPourer
 import storySaver
 import wordGrabber
 
-app = Flask(__name__)
+frontend  = Path(__file__).parent /"mad-front"/"dist"
+app = Flask(__name__,  template_folder = frontend, static_folder = frontend, static_url_path = "")
+#app = Flask(__name__)
 
-@app.route("/")
-def loadHome():
-    return render_template("home.html",stories=wordGrabber.getStories())
 
-@app.route("/story", methods = ['POST'])
-def story():
+@app.route("/", methods = (['GET']))
+def serveReact():
+    return render_template("index.html")
+
+@app.route("/stories", methods = (["GET"]))
+def getStories():
+    return wordGrabber.getStories().to_json()
+    
+@app.route("/story", methods = (["POST"]))
+def getStory():
     pickedStory = request.form.get('stories')
-    if pickedStory is not None:
-        rawStory = wordGrabber.getStory(wordGrabber.getStoryByName(pickedStory))
-        if "|" in rawStory: #is used in prepared stories with manual word choice, they should not go through the automatic process
-            story = noPeeling(rawStory)
-        else:
-            story = autoMad.autoMad(rawStory,33,wordGrabber.getDictionary()).replace("\n","<br>")
-        story = Markup(story)
-        return render_template('story.html',story=story)
-    autoStory = request.form.get('storyPaste')
-    if autoStory is not None:
-        sillyFactor = request.form.get('sillyness')
-        story = autoMad.autoMad(autoStory,int(sillyFactor),wordGrabber.getDictionary(), ['pokemon'])
-        story = Markup(story)
-        return render_template('story.html',story=story)
-    return render_template('story.html',story='no story foun')
-
-@app.route("/renderPage", methods = ['POST'])
-def renderPage():
-    soupSpoon = request.form.get('targetURL')
+    rawStory = wordGrabber.getStory(wordGrabber.getStoryByName(pickedStory))
+    if "|" in rawStory: #is used in prepared stories with manual word choice, they should not go through the automatic process
+        story = noPeeling(rawStory)
+    else:
+        story = autoMad.autoMad(rawStory,33,wordGrabber.getDictionary()).replace("\n","<br>")
+    storyJson = '{"story": "' + story + '"}'
+    return storyJson
+    
+@app.route("/text", methods = (["POST"]))
+def madText():
+    text = request.form.get('text')
     sillyFactor = request.form.get('sillyness')
-    pageout = Markup(soupPourer.madPage(soupSpoon,int(sillyFactor)))
-    return pageout     
+    story = autoMad.autoMad(text,int(sillyFactor),wordGrabber.getDictionary(), ['pokemon'])
+    storyJson = '{"story": "' + story + '"}'
+    return storyJson
 
 @app.route("/storySaver", methods = ( ['POST']))
 def saveStory():
