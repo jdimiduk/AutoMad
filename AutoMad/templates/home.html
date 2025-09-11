@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mad Lib Home</title>
+</head>
+<body>
+    <form method="POST" action="/story" name="pickStory">
+    Select a prewritten story:<br>
+    <select name= stories method="GET" action="/">
+        {% for story in stories %}
+        <option value= "{{story}}"> {{story}}</option>"
+        {% endfor %}
+    </select>
+    <input type="submit" value ="Submit">
+    </form>
+    <br><br>
+    <form method="POST" action="/renderPage">
+        Enter a URL to generate a madLib version of the page at that URL <br>
+        <textarea name="targetURL" placeholder="place link here" rows="1" cols="80">
+        </textarea>
+        <br>
+        Choose sillyness percent <input name="sillyness" type="range" min="0" max="100" value="20" class="slider" id="madPageSlider">
+        <p><span id="madPageOut">50</span></p>
+        <br>
+        <button type="submit">Submit</button>
+    </form>
+    <br> <br>
+    <form method="POST" action="/story" name="autoStory">
+        Paste text here to madLibify it <br>
+        <textarea name="storyPaste" placeholder="paste story here" rows="20" cols="80">
+        </textarea>
+        <br>
+        Choose sillyness percent <input name="sillyness" type="range" min="0" max="100" value="20" class="slider" id="autoMadSlider">
+        <p id="autoMadOut">20</p>
+        <br>
+        <button type="submit">Submit</button>
+    </form>
+<script>
+let slider = document.getElementById("madPageSlider");
+let output = document.getElementById("madPageOut");
+output.innerHTML = slider.value;
+
+slider.oninput = function() {output.innerHTML = this.value}
+
+let slider2 = document.getElementById("autoMadSlider");
+let output2 = document.getElementById("autoMadOut");
+output2.innerHTML = slider2.value;
+
+slider2.oninput = function() {output2.innerHTML = this.value}
+
+</script>
+    
+</body>
+</html>
