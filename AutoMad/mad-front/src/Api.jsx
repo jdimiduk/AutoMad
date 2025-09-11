@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export function getStories(setStories){
-	axios.get("http://192.168.0.154:5000/stories").then((response) => {
+	axios.get("http://192.168.1.154:5000/stories").then((response) => {
 		const stories = new Array();		
 		Object.keys(response.data).forEach(function(key) {
 			stories.push(response.data[key])
@@ -20,7 +20,7 @@ export function getStory(story, setStoryHTML, setShowStory){
 		  "content-type": "multipart/form-data",
 		},
 	};
-	const url = "http://192.168.0.154:5000/story";
+	const url = "http://192.168.1.154:5000/story";
 	axios.post(url, formData, config).then((response) => {
 	setStoryHTML(response.data.story);
 	setShowStory(true);
@@ -39,7 +39,7 @@ export function getFromText(story, sillyness, setStoryHTML, setShowStory){
 		  "content-type": "multipart/form-data",
 		},
 	};
-	const url = "http://192.168.0.154:5000/text";
+	const url = "http://192.168.1.154:5000/text";
 	axios.post(url, formData, config).then((response) => {
 	setStoryHTML(response.data.story);
 	console.log(response);
@@ -61,7 +61,7 @@ export function getPage(pageURL, sillyness, setStoryHTML, setShowStory){
 		  "content-type": "multipart/form-data",
 		},
 	};
-	const url = "http://192.168.0.154:5000/renderPage";
+	const url = "http://192.168.1.154:5000/renderPage";
 	axios.post(url, formData, config).then((response) => {
 		console.log(response);
 		setStoryHTML(response.data.html);
@@ -73,7 +73,7 @@ export function getPage(pageURL, sillyness, setStoryHTML, setShowStory){
 }
 
 export function saveStory(storyHTML){
-	const url = "http://192.168.0.154:5000/storySaver";
+	const url = "http://192.168.1.154:5000/storySaver";
 	axios.post(url, {
 	"story": storyHTML}).then((response) => {
 		console.log(response);

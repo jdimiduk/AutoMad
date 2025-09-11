@@ -20,9 +20,11 @@ import wordGrabber
 frontend  = Path(__file__).parent /"mad-front"/"dist"
 app = Flask(__name__,  template_folder = frontend, static_folder = frontend, static_url_path = "")
 
-#CORS(app)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 @app.route("/storyz", methods = ['POST'])
+@cross_origin()
 def story():
     pickedStory = request.form.get('stories')
     if pickedStory is not None:
@@ -42,6 +44,7 @@ def story():
     return render_template('story.html',story='no story found')
 
 @app.route("/renderPage", methods = ['POST'])
+@cross_origin()
 def renderPage():
     soupSpoon = request.form.get('targetURL')
     sillyFactor = request.form.get('sillyness')
@@ -51,19 +54,23 @@ def renderPage():
     return pageJson
 
 @app.route("/storySaver", methods = ( ['POST']))
+@cross_origin()
 def saveStory():
     storySaver.saveStory(request.json.get('story'))
     return '',204
 
 @app.route("/", methods = (['GET']))
+@cross_origin()
 def serveReact():
     return render_template("index.html")
 
 @app.route("/stories", methods = (["GET", "OPTIONS"]))
+@cross_origin()
 def getStories():
     return wordGrabber.getStories().to_json()
     
 @app.route("/story", methods = (["POST"]))
+@cross_origin()
 def getStory():
     pickedStory = request.form.get('stories')
     rawStory = wordGrabber.getStory(wordGrabber.getStoryByName(pickedStory))
@@ -76,6 +83,7 @@ def getStory():
     return storyJson
     
 @app.route("/text", methods = (["POST"]))
+@cross_origin()
 def madText():
     text = request.form.get('text')
     sillyFactor = request.form.get('sillyness')
