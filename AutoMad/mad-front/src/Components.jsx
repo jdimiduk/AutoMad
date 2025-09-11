@@ -31,7 +31,7 @@ export function PasteText({setShowStory, setStoryHTML}){
 	
 	return(
 	<div>
-	<textarea className="textarea" placeholder="Paste text here"  onChange={handleTextChange} value={pastedText}></textarea>
+	<textarea className="textarea textarea-xl" placeholder="Paste text here"  onChange={handleTextChange} value={pastedText}></textarea>
 	<input type="range" min={0} max="100" className="range" onChange={handleSillyChange} value={sillyness}></input>
 	<button  className="btn btn-outline btn-sm" onClick={()=> getFromText(pastedText, sillyness, setStoryHTML, setShowStory)}>Submit</button>
 	</div>
@@ -53,14 +53,13 @@ export function SillyPage({setShowStory, setStoryHTML}){
 	
 	function getPageFromAPI(url, sillyness, setPageHTML){
 		getPage(url, sillyness, setPageHTML);
-		setStoryHTML(pageHTML);
 		setShowStory(true);
 	}
 	
 	
 	return(
 	<div>
-	<textarea className="textarea" placeholder="Paste text here"  onChange={handleTextChange} value={url}></textarea>
+	<textarea className="textarea textarea-lg" placeholder="Paste url"  onChange={handleTextChange} value={url}></textarea>
 	<input type="range" min={0} max="100" className="range" onChange={handleSillyChange} value={sillyness}></input>
 	<button  className="btn btn-outline btn-sm" onClick={()=> getPageFromAPI(url, sillyness, setStoryHTML, setShowStory)}>Submit</button>
 	</div>
